@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Photography Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>My Photography Portfolio</h1>
+    </header>
+    <main>
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="Filter by search...">
+            <div class="filters">
+                <button class="filter-btn active" data-filter="All">All</button>
+                <button class="filter-btn" data-filter="Beach">Beach</button>
+                <button class="filter-btn" data-filter="Violin">Violin</button>
+                <button class="filter-btn" data-filter="Guitar">Guitar</button>
+            </div>
+        </div>
+        
+        <div class="gallery" id="gallery"></div>
+    </main>
+
+    <!-- Lightbox Overlay -->
+    <div class="lightbox" id="lightbox">
+        <span class="close-btn" id="closeLightbox">&times;</span>
+        <img id="lightboxImg" src="" alt="">
+        <p id="lightboxCaption"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
