@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Photography Portfolio</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 3rem 1rem 2rem;
+            text-align: center;
+            background: #ffffff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #3b82f6;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        main {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 3rem;
+            gap: 1.5rem;
+        }
+
+        #searchInput {
+            width: 100%;
+            max-width: 400px;
+            padding: 1rem 1.5rem;
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+            color: #1e293b;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        #searchInput:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        #searchInput::placeholder {
+            color: #64748b;
+        }
+
+        .filters {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            color: #64748b;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover {
+            border-color: #3b82f6;
+            color: #1e293b;
+        }
+
+        .filter-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover img {
+            transform: scale(1.05);
+        }
+
+        .card p {
+            padding: 1.2rem;
+            font-size: 1.05rem;
+            font-weight: 500;
+            text-align: center;
+            background: #ffffff;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            padding: 2.5rem;
+            max-width: 500px;
+            margin: 0 auto;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .form-container h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            text-align: center;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .input-group label {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select {
+            padding: 0.9rem;
+            background: #f8fafc;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            color: #1e293b;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            background: #ffffff;
+        }
+
+        .input-group select option {
+            background: #ffffff;
+            color: #1e293b;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 75vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .lightbox p {
+            color: white;
+            margin-top: 1.5rem;
+            font-size: 1.4rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            color: #64748b;
+            font-size: 3rem;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            header h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>My Photography Portfolio</h1>
+    </header>
+    <main>
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="Filter by search...">
+            <div class="filters">
+                <button class="filter-btn active" data-filter="All">All</button>
+                <button class="filter-btn" data-filter="Beach">Beach</button>
+                <button class="filter-btn" data-filter="Violin">Violin</button>
+                <button class="filter-btn" data-filter="Guitar">Guitar</button>
+            </div>
+        </div>
+        
+        <div class="gallery" id="gallery"></div>
+        
+        <div class="form-container">
+            <h2>Add a New Image</h2>
+            <form id="addForm">
+                <div class="input-group">
+                    <label for="imgUrl">Image URL</label>
+                    <input type="text" id="imgUrl" required>
+                </div>
+                <div class="input-group">
+                    <label for="imgCaption">Caption</label>
+                    <input type="text" id="imgCaption" required>
+                </div>
+                <div class="input-group">
+                    <label for="imgCategory">Category</label>
+                    <select id="imgCategory">
+                        <option value="Beach">Beach</option>
+                        <option value="Violin">Violin</option>
+                        <option value="Guitar">Guitar</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Add Image</button>
+            </form>
+        </div>
+    </main>
+
+    <div id="lightbox" class="lightbox">
+        <span class="close-btn">&times;</span>
+        <img id="lightboxImg" src="" alt="Lightbox Image">
+        <p id="lightboxCaption"></p>
+    </div>
+
+    <script>
+        const initialImages = [
+            { url: 'beach.jpeg', caption: 'Beach Views', category: 'Beach' },
+            { url: 'violin.jpeg', caption: 'My Violin', category: 'Violin' },
+            { url: 'guitar.jpeg', caption: 'Guitar Playing', category: 'Guitar' }
+        ];
+
+        let images = [...initialImages];
+        let currentFilter = 'All';
+        let searchQuery = '';
+
+        const gallery = document.getElementById('gallery');
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const addForm = document.getElementById('addForm');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxCaption = document.getElementById('lightboxCaption');
+        const closeBtn = document.querySelector('.close-btn');
+
+        function renderGallery() {
+            gallery.innerHTML = '';
+            const filteredImages = images.filter(img => {
+                const matchesCategory = currentFilter === 'All' || img.category === currentFilter;
+                const matchesSearch = img.caption.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            filteredImages.forEach(img => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => openLightbox(img.url, img.caption);
+
+                const imageEl = document.createElement('img');
+                imageEl.src = img.url;
+                imageEl.alt = img.caption;
+
+                const captionEl = document.createElement('p');
+                captionEl.textContent = img.caption;
+
+                card.appendChild(imageEl);
+                card.appendChild(captionEl);
+                gallery.appendChild(card);
+            });
+        }
+
+        function openLightbox(url, caption) {
+            lightboxImg.src = url;
+            lightboxCaption.textContent = caption;
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderGallery();
+        });
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                renderGallery();
+            });
+        });
+
+        addForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newImage = {
+                url: document.getElementById('imgUrl').value,
+                caption: document.getElementById('imgCaption').value,
+                category: document.getElementById('imgCategory').value
+            };
+            images.push(newImage);
+            renderGallery();
+            addForm.reset();
+        });
+
+        closeBtn.addEventListener('click', closeLightbox);
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        renderGallery();
+    </script>
+</body>
+</html>
